@@ -22,6 +22,9 @@ COPY --from=publish /app/publish .
 # Huawei Cloud CAE için gerekli ayarlar
 ENV ASPNETCORE_URLS=http://+:8080
 ENV DOTNET_RUNNING_IN_CONTAINER=true
+
+# Hem 8080 hem de 80 portunu expose et
+EXPOSE 80
 EXPOSE 8080
 
 ENTRYPOINT ["dotnet", "WEB_TEST.dll"]
