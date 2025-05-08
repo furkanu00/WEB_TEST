@@ -1,17 +1,18 @@
 ﻿# Build aşaması
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-# Proje dosyasını kopyala ve restore et
-COPY *.csproj ./
+COPY WEB_TEST.csproj ./WEB_TEST/
+WORKDIR /src/WEB_TEST
 RUN dotnet restore
 
-# Tüm dosyaları kopyala ve publish et
-COPY . ./
-RUN dotnet publish -c Release -o out
+COPY . .
+RUN dotnet publish -c Release -o /app/out
 
 # Runtime aşaması
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/out ./
+EXPOSE 8080
+EXPOSE 80
 ENTRYPOINT ["dotnet", "WEB_TEST.dll"]
